@@ -32,7 +32,7 @@ export default class Calendar extends Component {
 			monthShowing={this.props.monthShowing}
 			month={this.props.monthShowing.substring(5,7)}
 			year={this.props.monthShowing.substring(0,4)}
-			tasks={[]}
+			tasks={this.props.tasks}
 			styles={styles}
 			selectedDate={this.props.selectedDate}
 			today={this.props.today}

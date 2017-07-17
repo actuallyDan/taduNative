@@ -58,7 +58,7 @@ export default class MonthView extends Component {
 					}
 				};
 
-				return (<Day date={_calArray[i]} style={dayStyles} key={i} selectDate={this.props.selectDate.bind(this)}/>)
+				return (<Day date={_calArray[i]} style={dayStyles} key={i} tasks={tempCal[_calArray[i]]}selectDate={this.props.selectDate.bind(this)}/>)
 			})}
 			</View>
 			)

@@ -56,6 +56,7 @@ export default class App extends React.Component {
 
   }
   async componentDidMount(){
+    console.log(store.get("taduUserObj"));
     await Font.loadAsync({
       'Rajdhani': require('./assets/fonts/Rajdhani.ttf'),
     });

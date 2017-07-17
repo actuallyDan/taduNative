@@ -4,6 +4,7 @@ import {View, StyleSheet, Text, ListView, StatusBar} from 'react-native';
 import moment from 'moment';
 
 import SwipeableViews from 'react-swipeable-views-native';
+import store from 'react-native-simple-store';
 
 import Calendar from './Calendar.js';
 import Loader from './components/Loader.js';
@@ -18,15 +19,29 @@ export default class MainLayout extends Component {
 	constructor(props){
 		super();
 
-		var ds = new ListView.DataSource({rowHasChanged: (r1, r2)=> r1 != r2})
+		// var ds = new ListView.DataSource({rowHasChanged: (r1, r2)=> r1 != r2})
 
 		this.state = {
-			tasksDataSource : ds.cloneWithRows(tasks),
+			tasksDataSource : null
 			monthShowing : moment().format("YYYY-MM-DDTHH:mm"),
 			selectedDate: moment().format("YYYY-MM-DD"),
 			today: moment().format("YYYY-MM-DD"),
 			connected: false,
+			tasks : []
+			user: JSON.parse(store.get("taduUserObj"))
 		}
+	}
+	componentDidMount(){
+		/* Get tasks */
+		this.props.ddp.call("getTasks", [this.state.user], (err, res)=>{
+			if(err){
+				Alert("Error in Getting Tasks");
+				console.log(err)
+			} else {		
+				let ds = new ListView.DataSource({rowHasChanged: (r1, r2)=> r1 != r2})
+				this.setState({tasksDataSource : ds.cloneWithRows(res),tasks: res});
+			}
+		})
 	}
 	selectDate(date){
 		this.setState({
@@ -66,8 +81,9 @@ render(){
 		selectDate={this.selectDate.bind(this)}
 		tasksDataSource={this.state.tasksDataSource}
 		toggleTask={this.toggleTask.bind(this)}
+		tasks={this.state.tasks || []}
 		/>
-		<AddTask />
+		<AddTask ddp={this.props.ddp} user={this.state.user}/>
 
 		</SwipeableViews>
 
